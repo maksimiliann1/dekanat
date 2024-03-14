@@ -1,0 +1,71 @@
+@import "null.scss";
+.block{
+    /* background-color: rgb(152, 101, 39); */
+    text-align:center;
+    height: 100%;
+    border:1px solid;
+    /* background-color: #d17070;*/
+} 
+.navigation__button{
+    max-width: 100px;
+    max-height: 40px;
+}
+.header{
+    /* padding; */
+    margin-top: 2px;
+    /* background-color:beige; */
+    min-height: 100px;
+    max-height: 100px;
+    margin-bottom: 130px;
+    /* width:100px; */
+}
+.worksection{
+    min-height: 450px;
+}
+.logo{
+    background-image: url('../imgs/Rectangle\ 34.svg');
+}
+
+.logos{
+    text-align:center;
+} 
+.menu{
+    padding-top: auto;
+    .menu__li{
+        margin-left: 50px;
+        display: inline;
+        a:hover{
+            color:rgb(159, 32, 32);
+        }
+    }
+}
+.tabs {
+    position: relative; /* Относительное позиционирование */
+   }
+   .tab, .tab-title {
+    display: inline-block; /* Выстраиваем по горизонтали */
+   }
+   .tab input[type="radio"] { display: none; }
+   .tab-title {
+    background: #ccc; /* Цвет фона */
+    padding: 5px 10px; /* Поля вокруг текста */
+    border: 1px solid #666; /* Параметры рамки */
+    border-bottom: none; /* Снизу линию убираем */
+   }
+   .tab-content {
+    position: absolute; /* Абсолютное позиционирование */
+    border: 1px solid #666; /* Параметры рамки */
+    padding: 10px; /* Поля вокруг текста */
+    left: 0; /* Размещаем у левого края */
+    width: calc(100% - 20px); /* Ширина содержимого */
+    display: none; /* Прячем вкладку */
+   }
+   .tab :checked + .tab-title {
+    position: relative; /* Относительное позиционирование */
+    background: #fff; /* Цвет фона */
+    top: 1px; /* Сдвигаем вниз */
+    z-index: 1; /* Отображаем поверх содержимого */
+   }
+   .tab :checked ~ .tab-content {
+    display: block; /* Показываем активную вкладку */
+   }
