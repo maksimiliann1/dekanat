@@ -92,14 +92,15 @@ h1, h2, h3, h4, h5, h6 {
   max-height: 100px;
   margin-bottom: 130px;
   /* width:100px; */
+  margin-left: 0px;
+}
+
+.row {
+  margin-left: 0px;
 }
 
 .worksection {
   min-height: 450px;
-}
-
-.logo {
-  background-image: url("../imgs/Rectangle 34.svg");
 }
 
 .logos {

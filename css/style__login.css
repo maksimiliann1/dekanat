@@ -1,0 +1,155 @@
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+*, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+:focus, :active {
+  outline: none;
+}
+
+a:focus, a:active {
+  outline: none;
+}
+
+nav, footer, header, aside {
+  display: block;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-size: 100%;
+  line-height: 1;
+  font-size: 14px;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+input, button, textarea {
+  font-family: inherit;
+}
+
+input::-ms-clear {
+  display: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+a, a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+ul li {
+  list-style: none;
+}
+
+img {
+  vertical-align: top;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+body {
+  background: url("../imgs/background.png") no-repeat fixed;
+  background-size: cover;
+}
+
+.worksection {
+  height: 100%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  position: flex;
+}
+
+.container {
+  height: 100%;
+}
+
+.logger {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: flex;
+}
+.logger .action {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.login {
+  border: 5px solid #172F87;
+  width: 676px;
+  height: 379px;
+  background-color: white;
+  text-align: center;
+  position: relative;
+  border-radius: 10px;
+  font-size: 20px;
+}
+.login input {
+  border: 1px solid #172F87;
+  background-color: #E4E4E4;
+  margin-left: auto;
+  margin-right: auto;
+  width: 456px;
+  height: 60px;
+  border-radius: 10px;
+}
+.login .login__submit {
+  margin-top: 5px;
+  color: white;
+  background-color: #172F87;
+  width: 176px;
+  height: 38px;
+  border-radius: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.login .login__image {
+  margin-top: 30px;
+  margin: auto;
+  width: 169px;
+}
+.login .login__field {
+  margin-top: 39px;
+  width: 456px;
+  height: 60px;
+  display: block;
+}
+.login .login__password {
+  margin-top: 33px;
+  width: 456px;
+  height: 60px;
+  display: block;
+  border-radius: 10px;
+}
