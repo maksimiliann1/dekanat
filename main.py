@@ -7,12 +7,12 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route("/")
-def hello():
-    return "Hello, world!"
+# @app.route("/")
+# def hello():
+#     return "Hello, world!"
 
 
-@app.route("/users", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def users():
     print("users endpoint reached...")
     if request.method == "GET":

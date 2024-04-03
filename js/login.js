@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', (e)=>{
         event.preventDefault();
 
         const request = new XMLHttpRequest();
-        request.open('POST', 'server.php');
+        request.open('POST', 'http://localhost:1337');
         request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         const formData = new FormData(form);
 
