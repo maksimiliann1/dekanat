@@ -28,10 +28,10 @@ def users():
     if request.method == "POST":
         received_data = request.get_json()
         print(f"received data: {received_data}")
-        message = received_data['data']
+        # message = received_data['login']
         return_data = {
             "status": "success",
-            "message": f"received: {message}"
+            "mode": f"admin"
         }
         return flask.Response(response=json.dumps(return_data), status=201)
 
