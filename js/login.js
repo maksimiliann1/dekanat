@@ -90,10 +90,6 @@ document.addEventListener('DOMContentLoaded', (e)=>{
     console.log(form);
     form.addEventListener('submit', (event) => {
         event.preventDefault();
-
-        const request = new XMLHttpRequest();
-        request.open('POST', 'http://localhost:1337');
-        request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         const formData = new FormData(form);
 
         const object = {};
@@ -102,13 +98,20 @@ document.addEventListener('DOMContentLoaded', (e)=>{
         });
         const json = JSON.stringify(object);
         console.log(json);
-
-        request.send(json);
-
-        request.addEventListener('load', ()=>{
-            if (request.status === 200){
-                console.log(request.responseText);
-            }
+        
+        fetch('http://localhost:1337', {
+            method:"POST",
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: json  
+        }).then(data => data.text())
+        .then(data => {
+            console.log(data);
+        }).catch(()=>{
+            alert("ERROR");
+        }).finally(()=>{
+            form.reset();
         });
     });
 });
