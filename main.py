@@ -36,7 +36,7 @@ def users():
             login = received_data['login']
             password = received_data["password"]
 
-            account_id, mode = authentication(login, password)
+            account_id, mode = authentication(received_data['login'], received_data["password"])
 
             if account_id is not None and mode is not None:
                 response_data = {
