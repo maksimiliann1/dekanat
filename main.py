@@ -1,18 +1,25 @@
-from flask import Flask, request
 import flask
-import json
+from flask import Flask, request
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+import psycopg2
+from models import db, departments
 
 app = Flask(__name__)
 CORS(app)
 
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:3932323@localhost:5432/db_dekanat"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+migrate = Migrate(app, db)
 
 @app.route("/")
 def hello():
+    db.create_all()
     return "Hello, world!"
 
-
-@app.route("/users", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def users():
     print("users endpoint reached...")
     if request.method == "GET":
@@ -22,16 +29,18 @@ def users():
                 "username": "user4",
                 "pets": ["hamster"]
             })
-
             return flask.jsonify(data)
 
     if request.method == "POST":
         received_data = request.get_json()
         print(f"received data: {received_data}")
-        message = received_data['data']
+        if received_data['login'] == 'maxaufov':
+            mode = 'admin'
+        else:
+            mode = 'viewer'
         return_data = {
             "status": "success",
-            "message": f"received: {message}"
+            "mode": f"{mode}"
         }
         return flask.Response(response=json.dumps(return_data), status=201)
 
