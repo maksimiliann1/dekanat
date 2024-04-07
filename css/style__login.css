@@ -127,6 +127,8 @@ body {
 }
 .login .login__submit {
   margin-top: 5px;
+  padding-top: 8px;
+  text-align: center;
   color: white;
   background-color: #172F87;
   width: 176px;

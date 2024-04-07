@@ -21,6 +21,8 @@ function login_resizer(){
         loginImg.style.paddingTop = "30px";
         login.style.width = "1146px";
         login.style.height = "670px";
+        loginField.style.fontSize = "30px";
+        loginPassword.style.fontSize = "30px";
         logoBtn.style.width = "300px";
         logoBtn.style.height = "72px";
         logoBtn.style.marginTop = "25px";
@@ -44,6 +46,7 @@ function login_resizer(){
         logoBtn.style.height = "31px";
         logoBtn.style.marginTop = "1px";   
         logoBtn.style.fontSize = "15px";
+        logoBtn.style.paddingTop = "7px";
         console.log("tablet");            
     }else if(window.innerWidth <= 576){ 
         inputZise(loginField, 210, 34, 13, 8);
@@ -57,7 +60,7 @@ function login_resizer(){
         logoBtn.style.width = "87px";   
         logoBtn.style.height = "22px";
         logoBtn.style.marginTop = "-11px";
-        // logoBtn.style.marginLeft = "100px";
+        logoBtn.style.paddingTop = "4px";
         logoBtn.style.fontSize = "10px";
         console.log("phone");
     }else if(window.screen.width > 768 && window.screen.width < 1900){
@@ -72,7 +75,7 @@ function login_resizer(){
         logoBtn.style.width = "176px";   
         logoBtn.style.height = "38px";
         logoBtn.style.marginTop = "0px";
-        // logoBtn.style.marginLeft = "37%";
+        logoBtn.style.paddingTop = "7px";
         logoBtn.style.fontSize = "20px";
         console.log("laptop");
     }
@@ -107,7 +110,19 @@ document.addEventListener('DOMContentLoaded', (e)=>{
             body: json  
         }).then(data => data.text())
         .then(data => {
-            console.log(data);
+            data = JSON.parse(data);
+            if (data.mode == 'Админ'){
+                window.location.href = 'index_admin.html';
+            }else if(data.mode == 'Студент'){
+                window.location.href = 'index_student.html';
+            }else if(data.mode == 'Преподаватель'){
+                window.location.href = 'index_prepod.html'; 
+            }else{
+                loginField = document.querySelector(".login__field");
+                loginPassword = document.querySelector(".login__password");
+                loginField.style.border = "1px solid red";
+                loginPassword.style.border = "1px solid red";
+            }
         }).catch(()=>{
             alert("ERROR");
         }).finally(()=>{
