@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request
-from flask import Flask, jsonify, request
 import flask
 import json
 from flask_cors import CORS
@@ -31,7 +30,6 @@ def users():
                 })
 
                 return flask.jsonify(data)
-                return flask.jsonify(data)
 
         if request.method == "POST":
             received_data = request.get_json()
@@ -41,14 +39,13 @@ def users():
             account_id, mode = authentication(received_data['login'], received_data["password"])
 
             if account_id is not None and mode is not None:
-                # subjs = []
-                # if mode == 'Преподаватель':
-                #     # subjs = marks.query.with_entities(marks.subject_name).distinct()
-                #     subjs = [subj[0] for subj in marks.query.with_entities(marks.subject_name).distinct()]
-                #     print(subjs)
+                subjs = []
+                if mode == 'Преподаватель':
+                    subjs = [subj[0] for subj in marks.query.with_entities(marks.subject_name).distinct()]
+
                 response_data = {
                     "status": "success",
-                    # "subjects": subjs,
+                    "subjects": subjs,
                     "id": account_id,
                     "mode": mode
                 }
@@ -75,30 +72,11 @@ def authentication(login, password):
         traceback.print_exc()
         return None, None
 
-            return None, None
-    except Exception as e:
-        traceback.print_exc()
-        return None, None
-
-
 
 if __name__ == "__main__":
     app.run("localhost", 1337)     
-    app.run("localhost", 1337)     
+  
 
-
-
-    # def authentication(догин и пароль в джейсон формате):
-    # она ишет запись в которой есть логин и пароль и возвращает мод и ид
-
-   #         account = accounts.query.filter_by(login=login, password=password).first()
-    #         if account is not None:
-    #             return flask.Response(response=json.dumps({"status": "success",},), status=200)
-    #         else:
-    #             return flask.Response(response=json.dumps({"status": "error"}), status=401)
-    # except Exception as e:
-    #     traceback.print_exc()
-    #     return flask.Response(response=json.dumps({"status": "error", "message": str(e)}), status=500)
 
 
     # def authentication(догин и пароль в джейсон формате):
