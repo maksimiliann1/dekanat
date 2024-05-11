@@ -56,10 +56,10 @@ def users():
                 else:
                     return flask.Response(response=json.dumps({"status": "error"}), status=401, mimetype='application/json')
             elif stage == '2':
-                subject, group = received_data['subject'], received_data['gruop']
+                subject, group = received_data['subject'], received_data['group']
                 if subject is not None and group is not None:
                     ents = []
-                    ents_query = marks.query.filter_by(subject_name=subject, group_name=group)
+                    ents_query = marks.query.filter_by(subject_name=subject, group_id=group)
                     for ent in ents_query:
                         ents.append({
                             'id': ent.id,
