@@ -32,7 +32,7 @@ class marks(db.Model):
     __tablename__ = 'marks'
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
-    group_name = db.Column(db.String(50), db.ForeignKey('groups.group_name'), nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id'), nullable=False)
     subject_name = db.Column(db.String(50), nullable=False)
     module_1 = db.Column(db.Integer(), nullable=True)
     module_2 = db.Column(db.Integer(), nullable=True)
