@@ -46,8 +46,8 @@ class subjects(db.Model):
     __tablename__ = 'subjects'
     id = db.Column(db.Integer, primary_key=True)
     subject_name = db.Column(db.String(50), nullable=False)
-    hours = db.Columns(db.Integer, nullable=False)
-    labs_amount = db.Columns(db.Integer, nullable=False)
+    hours = db.Column(db.Integer, nullable=False)
+    labs_amount = db.Column(db.Integer, nullable=False)
     lectures_amount = db.Column(db.Integer, nullable=False)
     sems_amount = db.Column(db.Integer, nullable=False)
     id_department = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)

@@ -41,7 +41,7 @@ def users():
             if account_id is not None and mode is not None:
                 subjs = []
                 if mode == 'Преподаватель':
-                    subjs = marks.query.with_entities(marks.subject_name).distinct()
+                    subjs = [subj[0] for subj in marks.query.with_entities(marks.subject_name).distinct()]
                 response_data = {
                     "status": "success",
                     "subjects": subjs,
