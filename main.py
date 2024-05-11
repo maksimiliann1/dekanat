@@ -5,7 +5,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import psycopg2
-from models import db, departments, accounts
+from models import db, departments, accounts, marks
 import traceback
 
 app = Flask(__name__)
@@ -39,8 +39,12 @@ def users():
             account_id, mode = authentication(received_data['login'], received_data["password"])
 
             if account_id is not None and mode is not None:
+                subjs = []
+                if mode == 'Преподаватель':
+                    subjs = marks.query.with_entities(marks.subject_name).distinct()
                 response_data = {
                     "status": "success",
+                    "subjects": subjs,
                     "id": account_id,
                     "mode": mode
                 }
