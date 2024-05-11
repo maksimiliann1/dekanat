@@ -5,16 +5,16 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import psycopg2
-from models import db, departments, accounts, marks
+from models import db, departments, accounts, students, marks
 import traceback
+
 
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:3932323@localhost:5432/db_dekanat"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db.init_app(app)
 migrate = Migrate(app, db)
-
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -39,12 +39,14 @@ def users():
             account_id, mode = authentication(received_data['login'], received_data["password"])
 
             if account_id is not None and mode is not None:
-                subjs = []
-                if mode == 'Преподаватель':
-                    subjs = marks.query.with_entities(marks.subject_name).distinct()
+                # subjs = []
+                # if mode == 'Преподаватель':
+                #     # subjs = marks.query.with_entities(marks.subject_name).distinct()
+                #     subjs = [subj[0] for subj in marks.query.with_entities(marks.subject_name).distinct()]
+                #     print(subjs)
                 response_data = {
                     "status": "success",
-                    "subjects": subjs,
+                    # "subjects": subjs,
                     "id": account_id,
                     "mode": mode
                 }

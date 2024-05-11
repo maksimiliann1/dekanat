@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+import flask
 
 db = SQLAlchemy()
 
@@ -23,22 +24,7 @@ class groups(db.Model):
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     headman_phone = db.Column(db.String(50), nullable=False)
     headman_name = db.Column(db.String(50), nullable=False)
-
-    def __repr__(self):
-        return f"Group(group_name='{self.group_name}', amount='{self.amount}', direction_code='{self.direction_code}')"
-
-
-class marks(db.Model):
-    __tablename__ = 'marks'
-    id = db.Column(db.Integer, primary_key=True)
-    student_first_name = db.Column(db.String(50), db.ForeignKey('students.first_name'), nullable=False)
-    student_last_name = db.Column(db.String(50), db.ForeignKey('students.last_name'), nullable=False)
-    student_patronymic = db.Column(db.String(50), db.ForeignKey('students.patronymic'), nullable=False)
-    group_name = db.Column(db.String(50), nullable=False)
-    subject_name = db.Column(db.String(50), nullable=False)
-    module_1 = db.Column(db.Integer(), nullable=True)
-    module_2 = db.Column(db.Integet(), nullable=True)
-    _name = db.Column(db.String(50), nullable=False)
+    
 
     def __repr__(self):
         return f"Group(group_name='{self.group_name}', amount='{self.amount}', direction_code='{self.direction_code}')"
@@ -81,3 +67,17 @@ class accounts(db.Model):
     def __repr__(self):
         return f"Accounts(name='{self.students_id}')"
     
+class marks(db.Model):
+    __tablename__ = 'marks'
+    id = db.Column(db.Integer, primary_key=True)
+    student_first_name = db.Column(db.String(50), db.ForeignKey('students.first_name'), nullable=False)
+    student_last_name = db.Column(db.String(50), db.ForeignKey('students.last_name'), nullable=False)
+    student_patronymic = db.Column(db.String(50), db.ForeignKey('students.patronymic'), nullable=False)
+    group_name = db.Column(db.String(50), nullable=False)
+    subject_name = db.Column(db.String(50), nullable=False)
+    module_1 = db.Column(db.Integer(), nullable=True)
+    module_2 = db.Column(db.Integer(), nullable=True)
+    _name = db.Column(db.String(50), nullable=False)
+
+    def __repr__(self):
+        return f"Group(group_name='{self.group_name}', amount='{self.amount}', direction_code='{self.direction_code}')"
