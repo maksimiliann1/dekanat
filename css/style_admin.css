@@ -1,0 +1,158 @@
+@charset "UTF-8";
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+*, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+:focus, :active {
+  outline: none;
+}
+
+a:focus, a:active {
+  outline: none;
+}
+
+nav, footer, header, aside {
+  display: block;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-size: 100%;
+  line-height: 1;
+  font-size: 14px;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+input, button, textarea {
+  font-family: inherit;
+}
+
+input::-ms-clear {
+  display: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+a, a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+ul li {
+  list-style: none;
+}
+
+img {
+  vertical-align: top;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.block {
+  /* background-color: rgb(152, 101, 39); */
+  text-align: center;
+  height: 100%;
+  border: 1px solid;
+  /* background-color: #d17070;*/
+}
+
+.navigation__button {
+  max-width: 100px;
+  max-height: 40px;
+}
+
+.header {
+  /* padding; */
+  margin-top: 2px;
+  /* background-color:beige; */
+  min-height: 100px;
+  max-height: 100px;
+  margin-bottom: 130px;
+  /* width:100px; */
+  margin-left: 0px;
+}
+
+.row {
+  margin-left: 0px;
+}
+
+.worksection {
+  min-height: 450px;
+}
+
+.logos {
+  text-align: center;
+}
+
+.menu {
+  padding-top: auto;
+}
+.menu .menu__li {
+  margin-left: 50px;
+  display: inline;
+}
+.menu .menu__li a:hover {
+  color: rgb(159, 32, 32);
+}
+
+.tabs {
+  position: relative; /* Относительное позиционирование */
+}
+
+.tab, .tab-title {
+  display: inline-block; /* Выстраиваем по горизонтали */
+}
+
+.tab input[type=radio] {
+  display: none;
+}
+
+.tab-title {
+  background: #ccc; /* Цвет фона */
+  padding: 5px 10px; /* Поля вокруг текста */
+  border: 1px solid #666; /* Параметры рамки */
+  border-bottom: none; /* Снизу линию убираем */
+}
+
+.tab-content {
+  position: absolute; /* Абсолютное позиционирование */
+  border: 1px solid #666; /* Параметры рамки */
+  padding: 10px; /* Поля вокруг текста */
+  left: 0; /* Размещаем у левого края */
+  width: calc(100% - 20px); /* Ширина содержимого */
+  display: none; /* Прячем вкладку */
+}
+
+.tab :checked + .tab-title {
+  position: relative; /* Относительное позиционирование */
+  background: #fff; /* Цвет фона */
+  top: 1px; /* Сдвигаем вниз */
+  z-index: 1; /* Отображаем поверх содержимого */
+}
+
+.tab :checked ~ .tab-content {
+  display: block; /* Показываем активную вкладку */
+}
