@@ -97,20 +97,36 @@ def users():
                 return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200, mimetype='application/json')
             elif stage == '3':
                 subject, group = received_data['subject'], received_data['group']
+                account_id, mode = received_data['id'], received_data['mode']
+                group_result = groups.query.filter_by(group_name=group).first()
+                group_id = int(group_result.id)
                 if subject is not None and group is not None:
                     ents = []
-                    ents_query = marks.query.filter_by(subject_name=subject, group_id=group)
+                    ents_query = marks.query.filter_by(subject_name=subject, group_id=group_id)
+                    student_ids = []
+                    for ent in ents_query:
+                        student_ids.append(ent.student_id)
+                    students_data = students.query.filter(students.id.in_(student_ids)).all()
+                    student_dict = {student.id: {"name": student.first_name, "surname": student.last_name,
+                                                 "patronymic": student.patronymic} for student in students_data}
+
+                    # Преобразование значений в словаре student_dict в JSON-сериализуемый формат
+                    for student_id, student_data in student_dict.items():
+                        student_dict[student_id] = dict(student_data)
+
+                    student_names_array = [student_dict[student_id] for student_id in student_ids]
                     for ent in ents_query:
                         ents.append({
-                            'id': ent.id,
-                            'student_id': ent.student_id,
                             'module_1': ent.module_1,
                             'module_2': ent.module_2,
                             'last_mark': ent.last_mark
                         })
                     response_data = {
                         "status": "success",
-                        "entities": ents,
+                        "id": account_id,
+                        "mode": mode,
+                        "students": student_names_array,
+                        "marks": ents,
                         }
                     print(response_data)
                     return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200, mimetype='application/json')

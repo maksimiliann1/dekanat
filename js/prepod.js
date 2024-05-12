@@ -1,3 +1,89 @@
+function requestMarks(userId, mode, subj, group){
+    const object = {
+        id: userId,
+        subject: subj,
+        group: group,
+        mode: mode,
+        stage: "3"
+    };
+    json = JSON.stringify(object);
+    console.log(json);
+    fetch('http://localhost:1337', {
+            method:"POST",
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: json  
+        }).then(data => data.text())
+        .then(data => {
+            data = JSON.parse(data);
+            console.log(data);
+            table = document.querySelector('.table');
+            students = data.students;
+            marks = data.marks;
+            for(let i = 0; i<students.length; i++){
+                str = document.createElement('tr');
+                // child.classList.add('predm__li');
+                stolb1 = document.createElement('td');
+                stolb1.classList.add('td_1');
+                stolb2 = document.createElement('td');
+                stolb2.classList.add('td_2');
+                stolb3 = document.createElement('td');
+                stolb3.classList.add('td_2');
+                stolb4 = document.createElement('td');
+                stolb4.classList.add('td_2');
+                stolb1.textContent = `${students[i].name} ${students[i].surname} `;
+                if (marks[i].module_1 == null){
+                    input = document.createElement('input');
+                    input.classList.add('empty_td');
+                    input.type = 'text';
+                    stolb2.appendChild(input);
+                    stolb2.style.backgroundColor = "#D02F2F";
+                }else{
+                    stolb2.textContent = `${marks[i].module_1}`;
+                }
+                if (marks[i].module_2 == null){
+                    input = document.createElement('input');
+                    input.classList.add('empty_td');
+                    input.type = 'text';
+                    stolb3.appendChild(input);
+                    stolb3.style.backgroundColor = "#D02F2F";
+                }else{
+                    stolb3.textContent = `${marks[i].module_2}`;
+                }
+                if (marks[i].last_mark == null){
+                    input = document.createElement('input');
+                    input.classList.add('empty_td');
+                    input.type = 'text';
+                    stolb4.appendChild(input);
+                    stolb4.style.backgroundColor = "#D02F2F";
+                }else{
+                    stolb4.textContent = `${marks[i].last_mark}`;
+                }
+                str.appendChild(stolb1);
+                str.appendChild(stolb2);
+                str.appendChild(stolb3);
+                str.appendChild(stolb4);
+
+                table.appendChild(str);
+
+            }
+        }).catch(()=>{
+            alert("ERROR");
+        }).finally(()=>{
+            console.log('Денис Эклер');
+            blockPredm = document.querySelector('.predmets__2');
+            blockPredm.style.display = 'block';
+        });
+}
+function deleteRows() {
+    let table = document.querySelector("table");
+    let rowCount = table.rows.length;
+    
+    for (let i = rowCount - 1; i > 0; i--) {
+    table.deleteRow(i);
+    }
+    }
 function studentResizer(widthStart){
     profile = document.querySelector(".profile");
     navigationElement = document.querySelector(".second")
@@ -32,7 +118,14 @@ function studentResizer(widthStart){
 }
 document.addEventListener('DOMContentLoaded', (e)=>{
     // e.preventDefault();
-    
+    backMarks = document.querySelector('#back_marks');
+    backMarks.addEventListener('click', () => {
+        predmets = document.querySelector('.predmets');
+        predmets.style.display = 'block';
+        predmets2 = document.querySelector('.predmets__2');
+        predmets2.style.display = 'none';
+        deleteRows();
+    })
     studentResizer();
     window.addEventListener('resize', () => {
         studentResizer();
@@ -82,6 +175,11 @@ document.addEventListener('DOMContentLoaded', (e)=>{
                 childA.className = "predm__li__text"
                 child.appendChild(childA);
                 predmUl.appendChild(child);
+                child.addEventListener('click', (e)=>{
+                    blockPredm = document.querySelector('.predmets');
+                    blockPredm.style.display = 'none';
+                    requestMarks(userId, mode, subjects[i], groups[i]);
+                });
             }
         }).catch(()=>{
             alert("ERROR");

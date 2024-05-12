@@ -149,3 +149,43 @@ body {
   font-size: medium;
   color: #001AFF;
   }
+  .predmets__2 {
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 900px;
+    height: 800px;
+    background-color: white;
+    border: 1px solid;
+    }
+    .predmets__2 .table {
+    border-collapse: collapse;
+    width: 100%;
+    }
+    .predmets__2 th {
+      border: 1px solid;
+      font-size: 20px;
+      height: 30px;
+      }
+    .predmets__2 td {
+    border: 1px solid;
+    font-size: 20px;
+    height: 30px;
+    }
+    .predmets__2 .td_1 {
+    width: 35%;
+    text-align: center;
+    
+    }
+    .predmets__2 .td_2 {
+    width: 15%;
+    text-align: center;
+    
+    }
+    .predmets__2 .empty_td {
+    text-align: center;
+    width: 100%;
+    height: 30px;
+    background-color:#D02F2F;
+    }
+    
