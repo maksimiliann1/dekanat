@@ -7,7 +7,7 @@ from flask_migrate import Migrate
 import psycopg2
 from models import db, departments, accounts, students, marks, teachers
 import traceback
-
+import bcrypt
 
 app = Flask(__name__)
 CORS(app)
@@ -38,12 +38,11 @@ def users():
                 login = received_data['login']
                 password = received_data["password"]
 
-                account_id, mode, entity_id = authentication(received_data['login'], received_data["password"])
+                account_id, mode, entity_id = authenticate(received_data['login'], received_data["password"])
 
                 if account_id is not None and mode is not None:
                     name = None
                     surname = None
-                    subjs = []
                     if mode == 'Преподаватель':
                         teacher = teachers.query.filter_by(id=entity_id).first()
                         # Проверяем, что преподаватель найден
@@ -51,15 +50,12 @@ def users():
                             # Получаем имя и фамилию преподавателя из объекта
                             name = teacher.first_name
                             surname = teacher.last_name
-                        subjs = [(subj[0], subj[1]) for subj in marks.query.with_entities(marks.subject_name, marks.group_id).distinct()]
                     elif mode == 'Студент':
                         student = students.query.filter_by(id=entity_id).first()
-                        name = student.first_name
-                        surname = student.last_name
-                        subjs = [(subj[0], subj[1]) for subj in marks.query.with_entities(marks.subject_name, marks.group_id).distinct()]
+                        name = student.last_name
+                        surname = student.first_name
                     response_data = {
                         "status": "success",
-                        "subjects": subjs,
                         "id": account_id,
                         "name": name,
                         "surname": surname,
@@ -70,6 +66,22 @@ def users():
                 else:
                     return flask.Response(response=json.dumps({"status": "error"}), status=401, mimetype='application/json')
             elif stage == '2':
+                mode = received_data['mode']
+                account_id = received_data['id']
+                subjs = []
+                if mode == 'Преподаватель':
+                    subjs = [(subj[0], subj[1]) for subj in marks.query.with_entities(marks.subject_name, marks.group_id).distinct()]
+                elif mode == 'Студент':
+                    subjs = [(subj[0], subj[1]) for subj in marks.query.with_entities(marks.subject_name, marks.group_id).distinct()]
+                response_data = {
+                    "status": "success",
+                    "subjects": subjs,
+                    "id": account_id,
+                    "mode": mode
+                }
+                print(response_data)
+                return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200, mimetype='application/json')
+            elif stage == '3':
                 subject, group = received_data['subject'], received_data['group']
                 if subject is not None and group is not None:
                     ents = []
@@ -91,8 +103,6 @@ def users():
                 else:
                     return flask.Response(response=json.dumps({"status": "error"}), status=401, mimetype='application/json')
 
-
-
     except Exception as e:
         traceback.print_exc()
         return flask.Response(response=json.dumps({"status": "error", "message": str(e)}), status=500)
@@ -102,18 +112,18 @@ def get_stage(f):
     return f['stage']
 
 
+def authenticate(username, password):
+    account = accounts.query.filter_by(login=username).first()
 
-def authentication(login, password):
-    try:
-        account = accounts.query.filter_by(login=login, password=password).first()
+    if account is None:
+        return None, None, None
 
-        if account is not None:
-            return account.id, account.mode, account.entity_id
-        else:
-            return None, None  , None
-    except Exception as e:
-        traceback.print_exc()
-        return None, None  , None
+    stored_hash = account.password
+
+    if bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
+        return account.id, account.mode, account.entity_id
+    else:
+        return None, None, None
 
 
 if __name__ == "__main__":
