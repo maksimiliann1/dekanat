@@ -1,49 +1,91 @@
 @import "null.scss";
+$notebook_large_width:1400px;
+$notebook_small_width:1055px;
+$tablet_width:900px;
+$phone_width: 719px;
+$phone__small_width: 576px;
+$phone__small2_width: 476px;
 body{
     background: url("../imgs/background.png") no-repeat fixed;
     background-size: cover;
+    width: 100vw;
 
 }
 .header{
     background-color: #FFFF;
-    width: 100%;
+    width: 100vw;
     height: 216px;
     box-shadow: 0px 2px 2px rgb(0, 0, 0);
     .logo{
-        width: 302px;
-        height: 169px;
+        border:1px solid;
+        width: 300px;
+        height: 168px;
         margin-top: 10px;
-        margin-left: 15px;
+        padding-left: 15px;
         display: inline-block;
     }
+    .profile{
+        border:1px solid;
+        //width:84%;
+        display: inline-block;
+        margin-top: 20px;
+        padding-left: 900px;
+        // padding-right:5vw;
+        font-weight: 500;
+        padding-top: 70px;
+        color:black;
+        font-size: 20px;
+        .profile__pic{
+            //  
+            margin-top:-15px;
+            width:57px;
+            height: 57px;
+            margin-left: 15px;
+            display: inline;
+        }
+        // @media (max-width: $tablet_width) {
+        //     .profile__pic{
+        //         //  
+        //         margin-top:-4px;
+        //         width:40px;
+        //         height: 40px;
+        //     }
+        // }
+        // @media (max-width: $phone__small2_width) {
+        //     .profile__pic{
+        //         //  
+        //         margin-top:-4px;
+        //         width:30px;
+        //         height: 30px;
+        //     }
+        // }
+       
+        .profile__text{
+            
+            font-weight: 400;
+            // margin-top: 30px;
+            
+            //margin-right: 2%;
+            display: inline;
+        }
+    
+    }
     .navigation{
-        //margin-top: 150px;
-        margin-left: 10vw;
+            //margin-top: 150px;
+        padding-top:5px;
+        margin-left: 452px;
         font-size: 25px;
         color:black;
         display: inline-block;
-        .profile{
-            display: inline-block;
-            margin-top: 30px;
-            margin-left: 55vw;
-            font-weight: 500;
-            color:black;
-            .profile__text{
-                font-weight: 400;
-                margin-top: 15px;
-                margin-right: 2vw;
-                display: inline-block;
-            }
-        }
+        
         
     }
-    .profile__pic{
-        width:57px;
-        height: 57px;
+    @media (max-width: $tablet_width) {
+        
+    
     }
-}
 .menu__li{
-    margin-top: 70px;
+    // margin-left: 302px;
    
     display: inline-block;
     .menu__li__text {
@@ -53,12 +95,14 @@ body{
     
   }
   .second{
-    
-    margin-left: 25vw;
+    margin-left: 400px;
   }
   .third{
-    margin-top: 60px;
+    // margin-top: 60px;
     margin-left: 29px;
   }
-
+//   * {
+//     outline: solid red;
+//  }
+}
    

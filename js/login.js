@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', (e)=>{
         formData.forEach(function(value, key){
             object[key] = value;
         });
-        object.stage = "1";
+        object[stage] = "0";
         const json = JSON.stringify(object);
         console.log(json);
         
@@ -114,10 +114,15 @@ document.addEventListener('DOMContentLoaded', (e)=>{
             data = JSON.parse(data);
             if (data.mode == 'Админ'){
                 window.location.href = 'index_admin.html';
+
             }else if(data.mode == 'Студент'){
                 window.location.href = 'index_student.html';
             }else if(data.mode == 'Преподаватель'){
                 window.location.href = 'index_prepod.html'; 
+                localStorage.setItem('id', data.id); 
+                localStorage.setItem('name', data.name); 
+                localStorage.setItem('surname', data.surname); 
+                localStorage.setItem('mode', data.mode);
             }else{
                 loginField = document.querySelector(".login__field");
                 loginPassword = document.querySelector(".login__password");

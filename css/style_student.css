@@ -73,60 +73,62 @@ h1, h2, h3, h4, h5, h6 {
 body {
   background: url("../imgs/background.png") no-repeat fixed;
   background-size: cover;
+  width: 100vw;
 }
 
 .header {
   background-color: white;
-  width: 100%;
+  width: 100vw;
   height: 216px;
   -webkit-box-shadow: 0px 2px 2px rgb(0, 0, 0);
           box-shadow: 0px 2px 2px rgb(0, 0, 0);
 }
 .header .logo {
-  width: 302px;
-  height: 169px;
+  border: 1px solid;
+  width: 300px;
+  height: 168px;
   margin-top: 10px;
-  margin-left: 15px;
+  padding-left: 15px;
   display: inline-block;
 }
+.header .profile {
+  border: 1px solid;
+  display: inline-block;
+  margin-top: 20px;
+  padding-left: 900px;
+  font-weight: 500;
+  padding-top: 70px;
+  color: black;
+  font-size: 20px;
+}
+.header .profile .profile__pic {
+  margin-top: -15px;
+  width: 57px;
+  height: 57px;
+  margin-left: 15px;
+  display: inline;
+}
+.header .profile .profile__text {
+  font-weight: 400;
+  display: inline;
+}
 .header .navigation {
-  margin-left: 10vw;
+  padding-top: 5px;
+  margin-left: 452px;
   font-size: 25px;
   color: black;
   display: inline-block;
 }
-.header .navigation .profile {
-  display: inline-block;
-  margin-top: 30px;
-  margin-left: 55vw;
-  font-weight: 500;
-  color: black;
-}
-.header .navigation .profile .profile__text {
-  font-weight: 400;
-  margin-top: 15px;
-  margin-right: 2vw;
+.header .menu__li {
   display: inline-block;
 }
-.header .profile__pic {
-  width: 57px;
-  height: 57px;
-}
-
-.menu__li {
-  margin-top: 70px;
-  display: inline-block;
-}
-.menu__li .menu__li__text {
+.header .menu__li .menu__li__text {
   color: black;
   font-weight: 500;
 }
-
-.second {
-  margin-left: 25vw;
+.header .second {
+  margin-left: 400px;
 }
-
-.third {
-  margin-top: 60px;
+.header .third {
   margin-left: 29px;
 }
