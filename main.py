@@ -5,9 +5,12 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import psycopg2
-from models import db, departments, accounts, students, marks, teachers
+from models import db, departments, accounts, students, marks, teachers, groups
 import traceback
 import bcrypt
+from sqlalchemy import join
+from sqlalchemy import select
+
 
 app = Flask(__name__)
 CORS(app)
@@ -68,14 +71,25 @@ def users():
             elif stage == '2':
                 mode = received_data['mode']
                 account_id = received_data['id']
+                
                 subjs = []
+                subjs_name = []
+                group_names_array = []
+                group_names = []
                 if mode == 'Преподаватель':
                     subjs = [(subj[0], subj[1]) for subj in marks.query.with_entities(marks.subject_name, marks.group_id).distinct()]
+                    for i in range(len(subjs)):
+                        subjs_name.append(subjs[i][0])
+                        group_names.append(subjs[i][1])
+                    groups_data = groups.query.all()
+                    group_dict = {group.id: group.group_name for group in groups_data}
+                    group_names_array = [group_dict[group_id] for group_id in group_names]
                 elif mode == 'Студент':
                     subjs = [(subj[0], subj[1]) for subj in marks.query.with_entities(marks.subject_name, marks.group_id).distinct()]
                 response_data = {
                     "status": "success",
-                    "subjects": subjs,
+                    "subjects": subjs_name,
+                    "groups": group_names_array,
                     "id": account_id,
                     "mode": mode
                 }

@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', (e)=>{
         formData.forEach(function(value, key){
             object[key] = value;
         });
-        object[stage] = "0";
+        object.stage = "1";
         const json = JSON.stringify(object);
         console.log(json);
         

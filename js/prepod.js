@@ -45,42 +45,45 @@ document.addEventListener('DOMContentLoaded', (e)=>{
     const userSurname = localStorage.getItem('surname');
     const mode = localStorage.getItem('mode');
     profName.value = `${userName} ${userSurname}`
-    const stage = 2;
+    const stage = "2";
     const object = {
         id: userId,
         stage: stage,
         mode: mode
     };
     const json = JSON.stringify(object);
+    console.log(json);
     console.log(object);
     fetch('http://localhost:1337', {
-            method:"GET",
+            method:"POST",
             headers: {
                 'Content-type': 'application/json'
             },
             body: json  
+            
         }).then(data => data.text())
         .then(data => {
             data = JSON.parse(data);
-            if (data.mode == 'Админ'){
-                window.location.href = 'index_admin.html';
+            console.log(data);
+            // if (data.mode == 'Админ'){
+            //     window.location.href = 'index_admin.html';
 
-            }else if(data.mode == 'Студент'){
-                window.location.href = 'index_student.html';
-            }else if(data.mode == 'Преподаватель'){
-                window.location.href = 'index_prepod.html'; 
-                // localStorage.setItem('id', data.id); 
-                // localStorage.setItem('name', data.name); 
-                // localStorage.setItem('surname', data.surname); 
-            }else{
-                loginField = document.querySelector(".login__field");
-                loginPassword = document.querySelector(".login__password");
-                loginField.style.border = "1px solid red";
-                loginPassword.style.border = "1px solid red";
-            }
+            // }else if(data.mode == 'Студент'){
+            //     window.location.href = 'index_student.html';
+            // }else if(data.mode == 'Преподаватель'){
+            //     window.location.href = 'index_prepod.html'; 
+            //     // localStorage.setItem('id', data.id); 
+            //     // localStorage.setItem('name', data.name); 
+            //     // localStorage.setItem('surname', data.surname); 
+            // }else{
+            //     loginField = document.querySelector(".login__field");
+            //     loginPassword = document.querySelector(".login__password");
+            //     loginField.style.border = "1px solid red";
+            //     loginPassword.style.border = "1px solid red";
+            // }
         }).catch(()=>{
             alert("ERROR");
         }).finally(()=>{
-            form.reset();
+            console.log("powli vse nahui");
         });
 });
