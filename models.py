@@ -90,6 +90,7 @@ class accounts(db.Model):
     login = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     mode = db.Column(db.String(50), nullable=False)
+    entity_id = db.Column(db.Integer, db.ForeignKey('students.id'), neullable=True)
     def __repr__(self):
         return f"Accounts(name='{self.students_id}')"
     

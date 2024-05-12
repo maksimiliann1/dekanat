@@ -5,7 +5,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import psycopg2
-from models import db, departments, accounts, students, marks
+from models import db, departments, accounts, students, marks, teachers
 import traceback
 
 
@@ -38,17 +38,31 @@ def users():
                 login = received_data['login']
                 password = received_data["password"]
 
-                account_id, mode = authentication(received_data['login'], received_data["password"])
+                account_id, mode, entity_id = authentication(received_data['login'], received_data["password"])
 
                 if account_id is not None and mode is not None:
+                    name = None
+                    surname = None
                     subjs = []
                     if mode == 'Преподаватель':
+                        teacher = teachers.query.filter_by(id=entity_id).first()
+                        # Проверяем, что преподаватель найден
+                        if teacher:
+                            # Получаем имя и фамилию преподавателя из объекта
+                            name = teacher.first_name
+                            surname = teacher.last_name
                         subjs = [(subj[0], subj[1]) for subj in marks.query.with_entities(marks.subject_name, marks.group_id).distinct()]
-
+                    elif mode == 'Студент':
+                        student = students.query.filter_by(id=entity_id).first()
+                        name = student.first_name
+                        surname = student.last_name
+                        subjs = [(subj[0], subj[1]) for subj in marks.query.with_entities(marks.subject_name, marks.group_id).distinct()]
                     response_data = {
                         "status": "success",
                         "subjects": subjs,
                         "id": account_id,
+                        "name": name,
+                        "surname": surname,
                         "mode": mode
                     }
                     print(response_data)
@@ -64,8 +78,6 @@ def users():
                         ents.append({
                             'id': ent.id,
                             'student_id': ent.student_id,
-                            'group_name': ent.group_name,
-                            'subject_name': ent.subject_name,
                             'module_1': ent.module_1,
                             'module_2': ent.module_2,
                             'last_mark': ent.last_mark
@@ -96,12 +108,12 @@ def authentication(login, password):
         account = accounts.query.filter_by(login=login, password=password).first()
 
         if account is not None:
-            return account.id, account.mode
+            return account.id, account.mode, account.entity_id
         else:
-            return None, None
+            return None, None  , None
     except Exception as e:
         traceback.print_exc()
-        return None, None
+        return None, None  , None
 
 
 if __name__ == "__main__":
