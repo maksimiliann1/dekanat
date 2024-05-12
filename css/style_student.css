@@ -74,6 +74,7 @@ body {
   background: url("../imgs/background.png") no-repeat fixed;
   background-size: cover;
   width: 100vw;
+  overflow-x: hidden;
 }
 
 .header {
@@ -84,7 +85,7 @@ body {
           box-shadow: 0px 2px 2px rgb(0, 0, 0);
 }
 .header .logo {
-  border: 1px solid;
+  /* border: 1px solid; */
   width: 300px;
   height: 168px;
   margin-top: 10px;
@@ -92,7 +93,7 @@ body {
   display: inline-block;
 }
 .header .profile {
-  border: 1px solid;
+  /* border: 1px solid; */
   display: inline-block;
   margin-top: 20px;
   padding-left: 900px;
@@ -132,3 +133,19 @@ body {
 .header .third {
   margin-left: 29px;
 }
+.predmets {
+  margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 900px;
+  height: 800px;
+  background-color: white;
+  border: 1px solid;
+  }
+  .predmets .predm__li {
+  margin-top: 20px;
+  }
+  .predmets .predm__li__text {
+  font-size: medium;
+  color: #001AFF;
+  }

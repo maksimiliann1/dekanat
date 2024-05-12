@@ -40,11 +40,12 @@ document.addEventListener('DOMContentLoaded', (e)=>{
         
     });
     profName = document.querySelector('.profile__text')
+    console.log(profName);
     const userId = localStorage.getItem('id');
     const userName = localStorage.getItem('name');
     const userSurname = localStorage.getItem('surname');
     const mode = localStorage.getItem('mode');
-    profName.value = `${userName} ${userSurname}`
+    profName.textContent = `${userName} ${userSurname}`
     const stage = "2";
     const object = {
         id: userId,
@@ -52,6 +53,9 @@ document.addEventListener('DOMContentLoaded', (e)=>{
         mode: mode
     };
     const json = JSON.stringify(object);
+    profName = document.querySelector('.profile__text')
+    predmUl = document.querySelector('.predm__ul')
+   
     console.log(json);
     console.log(object);
     fetch('http://localhost:1337', {
@@ -65,22 +69,20 @@ document.addEventListener('DOMContentLoaded', (e)=>{
         .then(data => {
             data = JSON.parse(data);
             console.log(data);
-            // if (data.mode == 'Админ'){
-            //     window.location.href = 'index_admin.html';
-
-            // }else if(data.mode == 'Студент'){
-            //     window.location.href = 'index_student.html';
-            // }else if(data.mode == 'Преподаватель'){
-            //     window.location.href = 'index_prepod.html'; 
-            //     // localStorage.setItem('id', data.id); 
-            //     // localStorage.setItem('name', data.name); 
-            //     // localStorage.setItem('surname', data.surname); 
-            // }else{
-            //     loginField = document.querySelector(".login__field");
-            //     loginPassword = document.querySelector(".login__password");
-            //     loginField.style.border = "1px solid red";
-            //     loginPassword.style.border = "1px solid red";
-            // }
+            subjects = data.subjects;
+            groups = data.groups;
+            for(let i = 0; i<subjects.length; i++){
+                child = document.createElement('li');
+                child.classList.add('predm__li');
+                childA = document.createElement('a');
+                childA.classList.add('predm__li__text');
+                childA.href = '#';
+                childA.textContent = `${subjects[i]} ${groups[i]} `;
+                childA.className = "predm__li"
+                childA.className = "predm__li__text"
+                child.appendChild(childA);
+                predmUl.appendChild(child);
+            }
         }).catch(()=>{
             alert("ERROR");
         }).finally(()=>{
