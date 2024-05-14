@@ -71,7 +71,6 @@ function requestMarks(userId, mode, subj, group){
         }).catch(()=>{
             alert("ERROR");
         }).finally(()=>{
-            console.log('Денис Эклер');
             blockPredm = document.querySelector('.predmets__2');
             blockPredm.style.display = 'block';
         });
@@ -183,7 +182,5 @@ document.addEventListener('DOMContentLoaded', (e)=>{
             }
         }).catch(()=>{
             alert("ERROR");
-        }).finally(()=>{
-            console.log("powli vse nahui");
-        });
+        })
 });
