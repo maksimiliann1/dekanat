@@ -4,25 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style_student.css">
+    <link rel="stylesheet" href="css/style_admin.css">
     <title>Dekanat Stankin</title>
 </head>
 <body>
     <header class="header">
         <img src="imgs/Rectangle 35.png" alt="logo" class="logo">
+        <a class="profile" href="#">
+            <p class="profile__text"></p>
+            <img class="profile__pic" src="imgs/Rectangle 46.png" alt="student">
+        </a>
         <nav class="navigation">
-            <a class="profile" href="#"><p class="profile__text">Админ</p><img class="profile__pic" src="imgs/Rectangle 46.png" alt="student"></a>
+           
             <ul>
                 <li class = "menu__li"><a class="menu__li__text" href="#">Успеваемость</a></li>
                 <li class = "menu__li second"><a class="menu__li__text" href="#">Новости</a></li>
             </ul>
         </nav>     
     </header>
+    <div class="worksection">
+        <form class = "role_select">
+            <label class = "roles__label" for="roles">Выберите роль:</label>
+            <select class = "roles__select" id="roles" name="roles">
+              <option value="student">Студент</option>
+              <option value="prepod">Преподаватель</option>
+            </select>
+        </form>
+        <div class="form__info">
+            <p class="info">Информация о студенте</p>
+            <div class="form__info__fio">
+                <p class="info_name">ФИО:</p>
+                <input type="text" placeholder="Фамилия" class="surname">
+                <input type="text" placeholder="Имя" class="name">
+                <input type="text" placeholder="Отчество" class="patronymic">
+            </div>
+            <div class="form__info__bag">
+                <p class="info_name">Персональные данные:</p>
+                <input type="text" placeholder="Дата рождения" class="birthdate">
+                <input type="text" placeholder="Адрес" class="address">
+                <input type="text" placeholder="Телефон" class="phone">
+            </div>
+            <div class="form__info__bag">
+                <p class="info_name">Информация для вуза:</p>
+                <input type="text" placeholder="Привилегии" class="privelege_status">
+                <input type="text" placeholder="Зарплатная карта" class="scholarship_card_number">
+                <input type="text" placeholder="Номер студенческого билета" class="record_book_number">
+            </div>
+           
+            
+        </div>
+        <div class="form_acc_info">
+            <p class="info">Информация об аккаунте:</p>
+            <div class="form__info__bag">
+                <p class="info_name" >Логин(почта):</p>
+                <input type="text" placeholder="Электронная почта" class="email">
+            
+            </div>
+            <div class="form__info__bag">
+                <p class="info_name" >Пароль</p>
+                <input type="text" placeholder="Пароль" class="password">
+        </div>
+
+        
+        
+    </div>
+    <div class="form__info__prepod">
+        <p class="info">Информация о преподавателе</p>
+        <div class="form__info__fio__prepod">
+            <p class="info_name">ФИО:</p>
+            <input type="text" placeholder="Фамилия" class="surname_1">
+            <input type="text" placeholder="Имя" class="name_1">
+            <input type="text" placeholder="Отчество" class="patronymic_1">
+        </div>
+        <div class="form__info__bag__prepod">
+            <p class="info_name">Персональные данные:</p>
+            <input type="text" placeholder="Дата рождения" class="birthdate_1">
+            <input type="text" placeholder="Адрес" class="address_1">
+            <input type="text" placeholder="Телефон" class="phone_1">
+        </div>
+        <div class="form__info__bag__prepod">
+            <p class="info_name">Информация для вуза:</p>
+            <input type="text" placeholder="Зарплатная карта" class="scholarship_card_number_1">
+        </div>
+       
+        
+</div>
+    <div class="form_acc_info_prepod">
+            <p class="info">Информация об аккаунте:</p>
+            <div class="form__info__bag">
+                <p class="info_name" >Логин(почта):</p>
+                <input type="text" placeholder="Электронная почта" class="email_1">
+            
+            </div>
+            <div class="form__info__bag">
+                <p class="info_name" >Пароль</p>
+                <input type="text" placeholder="Пароль" class="password_1">
+            </div>
+        
+    </div>
+    <div class="button__div">
+        <button class="submit">Сохранить</button>
+    </div>
         
         
 
 
     
+    <script src="js/admin.js"></script>
     <script src="	https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
