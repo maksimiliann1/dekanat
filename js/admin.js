@@ -10,26 +10,25 @@ function sendPost(json){
         }).then(data => data.text())
         .then(data => {
             data = JSON.parse(data);
+        }).catch(()=>{
+            alert("ERROR");
+        }).finally(()=>{
             inputs = document.querySelectorAll('input');
             inputs.forEach((item)=>{
                 item.value = '';
             })
-        }).catch(()=>{
-            alert("ERROR");
-        }).finally(()=>{
-            form.reset();
         });
 }
 function studentAdd(){
-    prepodSurname = querySelector('.surname').value;
-    prepodName = querySelector('.name').value;
-    prepodPatronymic = querySelector('.patronymic').value;
-    prepodBirthday = querySelector('.birthdate').value;
-    prepodAddres = querySelector('.address').value;
-    prepodTelephone = querySelector('.phone').value;
-    prepodCardNumber = querySelector('.scholarship_card_number').value;
-    prepodLogin = querySelector('.email').value;
-    prepodPassword = querySelector('.password').value;
+    prepodSurname = document.querySelector('.surname').value;
+    prepodName = document.querySelector('.name').value;
+    prepodPatronymic = document.querySelector('.patronymic').value;
+    prepodBirthday = document.querySelector('.birthdate').value;
+    prepodAddres = document.querySelector('.address').value;
+    prepodTelephone = document.querySelector('.phone').value;
+    prepodCardNumber = document.querySelector('.scholarship_card_number').value;
+    prepodLogin = document.querySelector('.email').value;
+    prepodPassword = document.querySelector('.password').value;
     const object = {
         last_name: prepodName,
         first_name: prepodSurname,
@@ -48,15 +47,15 @@ function studentAdd(){
     sendPost(json) 
 }
 function prepodAdd(){
-    prepodSurname = querySelector('.surname_1').value;
-    prepodName = querySelector('.name_1').value;
-    prepodPatronymic = querySelector('.patronymic_1').value;
-    prepodBirthday = querySelector('.birthdate_1').value;
-    prepodAddres = querySelector('.address_1').value;
-    prepodTelephone = querySelector('.phone_1').value;
-    prepodCardNumber = querySelector('.scholarship_card_number_1').value;
-    prepodLogin = querySelector('.email_1').value;
-    prepodPassword = querySelector('.password_1').value;
+    prepodSurname = document.querySelector('.surname_1').value;
+    prepodName = document.querySelector('.name_1').value;
+    prepodPatronymic = document.querySelector('.patronymic_1').value;
+    prepodBirthday = document.querySelector('.birthdate_1').value;
+    prepodAddres = document.querySelector('.address_1').value;
+    prepodTelephone = document.querySelector('.phone_1').value;
+    prepodCardNumber = document.querySelector('.scholarship_card_number_1').value;
+    prepodLogin = document.querySelector('.email_1').value;
+    prepodPassword = document.querySelector('.password_1').value;
     const object = {
         last_name: prepodName,
         first_name: prepodSurname,

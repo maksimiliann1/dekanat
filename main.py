@@ -5,7 +5,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import psycopg2
-from models import db, departments, accounts, students, marks, teachers, groups, subjects
+from models import db, departments, accounts, students, marks, teachers, groups, subjects, admins
 import traceback
 import bcrypt
 from sqlalchemy import join
@@ -57,6 +57,10 @@ def users():
                         student = students.query.filter_by(id=entity_id).first()
                         name = student.last_name
                         surname = student.first_name
+                    elif mode == 'Админ':
+                        admin = admins.query.filter_by(id=entity_id).first()
+                        name = admin.first_name
+                        surname = admin.surname    
                     response_data = {
                         "status": "success",
                         "id": account_id,
@@ -68,33 +72,47 @@ def users():
                     return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200, mimetype='application/json')
                 else:
                     return flask.Response(response=json.dumps({"status": "error"}), status=401, mimetype='application/json')
-            elif stage == '2':
-                mode = received_data['mode']
-                account_id = received_data['id']
-                
-                subjs = []
-                subjs_name = []
-                group_names_array = []
-                group_names = []
-                if mode == 'Преподаватель':
-                    subjs = [(subj[0], subj[1]) for subj in marks.query.with_entities(marks.subject_name, marks.group_id).distinct()]
-                    for i in range(len(subjs)):
-                        subjs_name.append(subjs[i][0])
-                        group_names.append(subjs[i][1])
-                    groups_data = groups.query.all()
-                    group_dict = {group.id: group.group_name for group in groups_data}
-                    group_names_array = [group_dict[group_id] for group_id in group_names]
-                elif mode == 'Студент':
-                    subjs = [(subj[0], subj[1]) for subj in marks.query.with_entities(marks.subject_name, marks.group_id).distinct()]
-                response_data = {
-                    "status": "success",
-                    "subjects": subjs_name,
-                    "groups": group_names_array,
-                    "id": account_id,
-                    "mode": mode
-                }
-                print(response_data)
-                return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200, mimetype='application/json')
+            elif mode == 'Админ':
+                    account_id = received_data['account_id']
+                    first_name, last_name, patronymic = received_data['first_name'], received_data['last_name'], received_data['patronymic']
+                    brd, address, phone = received_data['birthdate'], received_data['address'], received_data['phone']
+                    card, login, pwd = received_data['card_number'], received_data['login'], received_data['password']
+                    target_mode = received_data['target_mode']
+                    position, department_id = received_data['position'], received_data['department_id']
+                    new_teacher = teachers(
+                        first_name=first_name,
+                        last_name=last_name,
+                        patronymic=patronymic,
+                        birthdate=brd,
+                        address=address,
+                        phone=phone,
+                        card_number=card,
+                        position=position,
+                        department_id=department_id
+                    )
+                    # Добавление новой записи в сессию
+                    db.session.add(new_teacher)
+                    db.session.commit()
+                    account = teachers.query.filter_by(first_name=first_name, last_name=last_name, patronymic=patronymic, phone=phone).first()
+                    uid = account.id
+                    salt = b'bf'
+                    pwdh = bcrypt.hashpw(pwd.encode('utf-8'), salt)
+                    new_acc = accounts(
+                        login=login,
+                        password=pwdh,
+                        mode=target_mode,
+                        entity_id=uid
+                    )
+                    db.session.add(new_acc)
+                    db.session.commit()
+                    response_data = {
+                        "status": "success",
+                        "id": account_id,
+                        "mode": mode
+                    }
+                    print(response_data)
+                    return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200,
+                                          mimetype='application/json')    
             elif stage == '3':
                 subject, group = received_data['subject'], received_data['group']
                 account_id, mode = received_data['id'], received_data['mode']
@@ -108,7 +126,7 @@ def users():
                         student_ids.append(ent.student_id)
                     students_data = students.query.filter(students.id.in_(student_ids)).all()
                     student_dict = {student.id: {"name": student.first_name, "surname": student.last_name,
-                                                 "patronymic": student.patronymic} for student in students_data}
+                                                "patronymic": student.patronymic} for student in students_data}
 
                     # Преобразование значений в словаре student_dict в JSON-сериализуемый формат
                     for student_id, student_data in student_dict.items():
@@ -117,6 +135,7 @@ def users():
                     student_names_array = [student_dict[student_id] for student_id in student_ids]
                     for ent in ents_query:
                         ents.append({
+                            'student_id': ent.student_id,
                             'module_1': ent.module_1,
                             'module_2': ent.module_2,
                             'last_mark': ent.last_mark
@@ -127,15 +146,39 @@ def users():
                         "mode": mode,
                         "students": student_names_array,
                         "marks": ents,
-                        }
+                    }
                     print(response_data)
                     return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200, mimetype='application/json')
                 else:
                     return flask.Response(response=json.dumps({"status": "error"}), status=401, mimetype='application/json')
+            elif stage == '4':
+                subject, group = received_data['subject'], received_data['group']
+                account_id, mode = received_data['id'], received_data['mode']
+                group_result = groups.query.filter_by(group_name=group).first()
+                group_id = int(group_result.id)
+                student_id = received_data['student_id']
+                module_1 = received_data['module_1']
+                module_2 = received_data['module_2']
+                last_mark = received_data['last_mark']
+
+                mark = marks.query.filter_by(student_id=student_id, subject_name=subject, group_id=group_id).first()
+                if mark:
+                    mark.module_1 = module_1
+                    mark.module_2 = module_2
+                    mark.last_mark = last_mark
+                    db.session.commit()
+                    response_data = {
+                        "status": "success",
+                        "message": "Оценки успешно обновлены"
+                    }
+                    return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200, mimetype='application/json')
+                else:
+                    return flask.Response(response=json.dumps({"status": "error", "message": "Запись не найдена"}), status=404, mimetype='application/json')
 
     except Exception as e:
         traceback.print_exc()
         return flask.Response(response=json.dumps({"status": "error", "message": str(e)}), status=500)
+
 
 
 def get_stage(f):

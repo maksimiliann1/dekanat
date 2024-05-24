@@ -112,6 +112,10 @@ document.addEventListener('DOMContentLoaded', (e)=>{
         }).then(data => data.text())
         .then(data => {
             data = JSON.parse(data);
+            localStorage.setItem('id', data.id); 
+            localStorage.setItem('name', data.name); 
+            localStorage.setItem('surname', data.surname); 
+            localStorage.setItem('mode', data.mode);
             if (data.mode == 'Админ'){
                 window.location.href = 'index_admin.html';
 
@@ -119,10 +123,6 @@ document.addEventListener('DOMContentLoaded', (e)=>{
                 window.location.href = 'index_student.html';
             }else if(data.mode == 'Преподаватель'){
                 window.location.href = 'index_prepod.html'; 
-                localStorage.setItem('id', data.id); 
-                localStorage.setItem('name', data.name); 
-                localStorage.setItem('surname', data.surname); 
-                localStorage.setItem('mode', data.mode);
             }else{
                 loginField = document.querySelector(".login__field");
                 loginPassword = document.querySelector(".login__password");

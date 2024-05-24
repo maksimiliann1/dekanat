@@ -79,8 +79,26 @@ class teachers(db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     patronymic = db.Column(db.String(50), nullable=False)
+    birthdate = db.Column(db.Date(), nullable=False)
+    address = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(50), nullable=False)
+    card_number = db.Column(db.Integer(), nullable=False)
     position = db.Column(db.String(50), nullable=False)
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
+    def __repr__(self):
+        return f"Teachers(name='{self.first_name}', patronymic='{self.patronymic}', position='{self.position}')"
+
+class admins(db.Model):
+    __tablename__ = 'admin'
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    patronymic = db.Column(db.String(50), nullable=False)
+    birthdate = db.Column(db.Date(), nullable=False)
+    address = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(50), nullable=False)
+    card_number = db.Column(db.Integer(), nullable=False)
+    position = db.Column(db.String(50), nullable=False)
     def __repr__(self):
         return f"Teachers(name='{self.first_name}', patronymic='{self.patronymic}', position='{self.position}')"
 
