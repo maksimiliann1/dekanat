@@ -10,6 +10,7 @@ function sendPost(json){
         }).then(data => data.text())
         .then(data => {
             data = JSON.parse(data);
+            
         }).catch(()=>{
             alert("ERROR");
         }).finally(()=>{
@@ -29,6 +30,7 @@ function studentAdd(){
     prepodCardNumber = document.querySelector('.scholarship_card_number').value;
     prepodLogin = document.querySelector('.email').value;
     prepodPassword = document.querySelector('.password').value;
+    id = localStorage.getItem('id');
     const object = {
         last_name: prepodName,
         first_name: prepodSurname,
@@ -39,7 +41,9 @@ function studentAdd(){
         card_number: prepodCardNumber,
         login: prepodLogin,
         password: prepodPassword,
-        mode: "Преподаватель",
+        target_mode: "Студент",
+        account_id: localStorage.getItem('id'),
+        mode: "Админ",
         stage: "2"
         
     };
@@ -56,6 +60,9 @@ function prepodAdd(){
     prepodCardNumber = document.querySelector('.scholarship_card_number_1').value;
     prepodLogin = document.querySelector('.email_1').value;
     prepodPassword = document.querySelector('.password_1').value;
+    prepodPosition = document.querySelector('.position').value;
+    id = localStorage.getItem('id');
+    department_id = document.querySelector('.department_id');
     const object = {
         last_name: prepodName,
         first_name: prepodSurname,
@@ -65,8 +72,12 @@ function prepodAdd(){
         phone: prepodTelephone,
         card_number: prepodCardNumber,
         login: prepodLogin,
+        position: prepodPosition,
         password: prepodPassword,
-        mode: "Преподаватель",
+        account_id: id,
+        department_id: department_id,
+        target_mode: "Преподаватель",
+        mode: "Админ",
         stage: "2"
         
     };
