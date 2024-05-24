@@ -235,28 +235,47 @@ def users():
                 else:
                     return flask.Response(response=json.dumps({"status": "error"}), status=401, mimetype='application/json')
             elif stage == '4':
-                subject, group = received_data['subject'], received_data['group']
+                subject, student_id = received_data['subject'], received_data['student_id']
                 account_id, mode = received_data['id'], received_data['mode']
-                group_result = groups.query.filter_by(group_name=group).first()
-                group_id = int(group_result.id)
-                student_id = received_data['student_id']
-                module_1 = received_data['module_1']
-                module_2 = received_data['module_2']
-                last_mark = received_data['last_mark']
-
-                mark = marks.query.filter_by(student_id=student_id, subject_name=subject, group_id=group_id).first()
-                if mark:
-                    mark.module_1 = module_1
-                    mark.module_2 = module_2
-                    mark.last_mark = last_mark
+                mark_type = received_data['type_of_mark']
+                target_mark = received_data['mark']
+                mark = marks.query.filter_by(student_id=student_id, subject_name=subject).first()
+                if not mark:
+                    return flask.Response(response=json.dumps({"status": "error", "message": "Запись не найдена"}),
+                                          status=404, mimetype='application/json')
+                if mark_type == 'module_1':
+                    mark.module_1 = target_mark
                     db.session.commit()
                     response_data = {
                         "status": "success",
-                        "message": "Оценки успешно обновлены"
+                        "message": "Оценки успешно обновлены",
+                        "id": account_id,
+                        "mode": mode
                     }
-                    return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200, mimetype='application/json')
-                else:
-                    return flask.Response(response=json.dumps({"status": "error", "message": "Запись не найдена"}), status=404, mimetype='application/json')
+                    return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200,
+                                              mimetype='application/json')
+                elif mark_type == 'module_2':
+                    mark.module_2 = target_mark
+                    db.session.commit()
+                    response_data = {
+                        "status": "success",
+                        "message": "Оценки успешно обновлены",
+                        "id": account_id,
+                        "mode": mode
+                    }
+                    return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200,
+                                          mimetype='application/json')
+                elif mark_type == 'last_mark':
+                    mark.last_mark = target_mark
+                    db.session.commit()
+                    response_data = {
+                        "status": "success",
+                        "message": "Оценки успешно обновлены",
+                        "id": account_id,
+                        "mode": mode
+                    }
+                    return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200,
+                                          mimetype='application/json')
 
     except Exception as e:
         traceback.print_exc()

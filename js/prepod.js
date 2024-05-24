@@ -1,3 +1,31 @@
+function sendPost(subj, studentId, inputValue, prepodId, typeOfMark, input){
+    const object = {
+        subject: subj,
+        student_id: studentId,
+        mark: inputValue,
+        id: prepodId,
+        type_of_mark: typeOfMark,
+        mode: "Преподаватель",
+        stage: "4"
+    }
+    json = JSON.stringify(object);
+    console.log('fuckshit ebal -------------------------------------------------', json);
+    fetch('http://localhost:1337', {
+            method:"POST",
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: json
+    }).then(data => data.text())
+        .then(data => {
+            input.style.backgroundColor = "#FFF";
+        }).catch(()=>{
+            alert("ERROR");
+        }).finally(()=>{
+
+        });
+}
+
 function requestMarks(userId, mode, subj, group){
     const object = {
         id: userId,
@@ -37,26 +65,38 @@ function requestMarks(userId, mode, subj, group){
                     input = document.createElement('input');
                     input.classList.add('empty_td');
                     input.type = 'text';
+                    input.addEventListener('change', ()=>{
+                        console.log(input.value);
+                        sendPost(subj, marks[i].student_id, input.value, localStorage.getItem('id'), "module_1", input);
+                    });
                     stolb2.appendChild(input);
                     stolb2.style.backgroundColor = "#D02F2F";
                 }else{
                     stolb2.textContent = `${marks[i].module_1}`;
                 }
                 if (marks[i].module_2 == null){
-                    input = document.createElement('input');
-                    input.classList.add('empty_td');
-                    input.type = 'text';
-                    stolb3.appendChild(input);
+                    input_2 = document.createElement('input');
+                    input_2.classList.add('empty_td');
+                    input_2.type = 'text';
+                    stolb3.appendChild(input_2);
                     stolb3.style.backgroundColor = "#D02F2F";
+                    input_2.addEventListener('change', ()=>{
+                        console.log(input_2.value);
+                        sendPost(subj, marks[i].student_id, input_2.value, localStorage.getItem('id'), "module_2", input_2);
+                    });
                 }else{
                     stolb3.textContent = `${marks[i].module_2}`;
                 }
                 if (marks[i].last_mark == null){
-                    input = document.createElement('input');
-                    input.classList.add('empty_td');
-                    input.type = 'text';
-                    stolb4.appendChild(input);
+                    input_3 = document.createElement('input');
+                    input_3.classList.add('empty_td');
+                    input_3.type = 'text';
+                    stolb4.appendChild(input_3);
                     stolb4.style.backgroundColor = "#D02F2F";
+                    input_3.addEventListener('change', ()=>{
+                        console.log(input_3.value);
+                        sendPost(subj, marks[i].student_id, input_3.value, localStorage.getItem('id'), "last_mark", input_3);
+                    });
                 }else{
                     stolb4.textContent = `${marks[i].last_mark}`;
                 }
@@ -70,10 +110,11 @@ function requestMarks(userId, mode, subj, group){
             }
         }).catch(()=>{
             alert("ERROR");
-        }).finally(()=>{
+        }).finally(()=>{    
             blockPredm = document.querySelector('.predmets__2');
             blockPredm.style.display = 'block';
         });
+        
 }
 function deleteRows() {
     let table = document.querySelector("table");
