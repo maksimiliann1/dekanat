@@ -7,9 +7,10 @@ from flask_migrate import Migrate
 import psycopg2
 from models import db, departments, accounts, students, marks, teachers, groups, subjects, admins
 import traceback
-import bcrypt
+import bcrypt as bc
 from sqlalchemy import join
 from sqlalchemy import select
+from passlib.hash import bcrypt
 
 
 app = Flask(__name__)
@@ -60,7 +61,7 @@ def users():
                     elif mode == 'Админ':
                         admin = admins.query.filter_by(id=entity_id).first()
                         name = admin.first_name
-                        surname = admin.surname    
+                        surname = admin.last_name    
                     response_data = {
                         "status": "success",
                         "id": account_id,
@@ -72,14 +73,49 @@ def users():
                     return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200, mimetype='application/json')
                 else:
                     return flask.Response(response=json.dumps({"status": "error"}), status=401, mimetype='application/json')
-            elif mode == 'Админ':
+            elif stage == '2':
+                mode = received_data['mode']
+                subjs = []
+                subjs_name = []
+                group_names_array = []
+                group_names = []
+                if mode == 'Преподаватель':
+                    account_id = received_data['id']
+                    subjs = [(subj[0], subj[1]) for subj in marks.query.with_entities(marks.subject_name, marks.group_id).distinct()]
+                    for i in range(len(subjs)):
+                        subjs_name.append(subjs[i][0])
+                        group_names.append(subjs[i][1])
+                    groups_data = groups.query.all()
+                    group_dict = {group.id: group.group_name for group in groups_data}
+                    group_names_array = [group_dict[group_id] for group_id in group_names]
+                elif mode == 'Админ':
                     account_id = received_data['account_id']
                     first_name, last_name, patronymic = received_data['first_name'], received_data['last_name'], received_data['patronymic']
                     brd, address, phone = received_data['birthdate'], received_data['address'], received_data['phone']
                     card, login, pwd = received_data['card_number'], received_data['login'], received_data['password']
                     target_mode = received_data['target_mode']
-                    position, department_id = received_data['position'], received_data['department_id']
-                    new_teacher = teachers(
+                    if target_mode == 'Студент':
+                        group_id = received_data['group_id']
+                        privelege_status = received_data['privelege_status']
+                        record_book_number = received_data['record_book_number']
+                        new_student = students(
+                        first_name=first_name,
+                        last_name=last_name,
+                        patronymic=patronymic,
+                        birthdate=brd,
+                        address=address,
+                        phone=phone,
+                        privelege_status=privelege_status,
+                        record_book_number=record_book_number,
+                        group_id=group_id,
+                        email=login,
+                        scholarship_card_number=card,
+                        )
+                        # Добавление новой записи в сессию
+                        db.session.add(new_student)
+                    elif target_mode == 'Преподаватель':
+                        position, department_id = received_data['position'], received_data['department_id']
+                        new_teacher = teachers(
                         first_name=first_name,
                         last_name=last_name,
                         patronymic=patronymic,
@@ -89,14 +125,20 @@ def users():
                         card_number=card,
                         position=position,
                         department_id=department_id
-                    )
-                    # Добавление новой записи в сессию
-                    db.session.add(new_teacher)
+                        )
+                        # Добавление новой записи в сессию
+                        db.session.add(new_teacher)
                     db.session.commit()
-                    account = teachers.query.filter_by(first_name=first_name, last_name=last_name, patronymic=patronymic, phone=phone).first()
+                    if target_mode == 'Студент':
+                        account = students.query.filter_by(first_name=first_name, last_name=last_name, patronymic=patronymic, phone=phone).first()
+                    elif target_mode == 'Преподаватель':
+                        account = teachers.query.filter_by(first_name=first_name, last_name=last_name, patronymic=patronymic, phone=phone).first()
                     uid = account.id
-                    salt = b'bf'
-                    pwdh = bcrypt.hashpw(pwd.encode('utf-8'), salt)
+                    acc = accounts.query.filter_by(id=11).first()
+                    hashed_pwd = acc.password
+                    rounds = int(hashed_pwd[4:6])  # Число раундов - это символы 5 и 6
+                    salt = hashed_pwd[7:29]  # Соль - это символы 8-29
+                    pwdh = bcrypt.using(rounds=rounds, salt=salt, ident="2a").hash(pwd)
                     new_acc = accounts(
                         login=login,
                         password=pwdh,
@@ -112,7 +154,18 @@ def users():
                     }
                     print(response_data)
                     return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200,
-                                          mimetype='application/json')    
+                                          mimetype='application/json')
+                elif mode == 'Студент':
+                    subjs = [(subj[0], subj[1]) for subj in marks.query.with_entities(marks.subject_name, marks.group_id).distinct()]
+                response_data = {
+                    "status": "success",
+                    "subjects": subjs_name,
+                    "groups": group_names_array,
+                    "id": account_id,
+                    "mode": mode
+                }
+                print(response_data)
+                return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200, mimetype='application/json')
             elif stage == '3':
                 subject, group = received_data['subject'], received_data['group']
                 account_id, mode = received_data['id'], received_data['mode']
@@ -180,7 +233,6 @@ def users():
         return flask.Response(response=json.dumps({"status": "error", "message": str(e)}), status=500)
 
 
-
 def get_stage(f):
     return f['stage']
 
@@ -193,7 +245,7 @@ def authenticate(username, password):
 
     stored_hash = account.password
 
-    if bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
+    if bc.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
         return account.id, account.mode, account.entity_id
     else:
         return None, None, None

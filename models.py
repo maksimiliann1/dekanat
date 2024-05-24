@@ -89,7 +89,7 @@ class teachers(db.Model):
         return f"Teachers(name='{self.first_name}', patronymic='{self.patronymic}', position='{self.position}')"
 
 class admins(db.Model):
-    __tablename__ = 'admin'
+    __tablename__ = 'admins'
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
