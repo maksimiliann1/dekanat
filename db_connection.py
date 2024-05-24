@@ -35,5 +35,5 @@ if __name__ == '__main__':
 
    
 
-        db.session.add_all([account])
-        db.session.commit()
+        # db.session.add_all([account])
+        # db.session.commit()

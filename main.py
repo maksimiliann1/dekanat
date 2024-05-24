@@ -88,6 +88,16 @@ def users():
                     groups_data = groups.query.all()
                     group_dict = {group.id: group.group_name for group in groups_data}
                     group_names_array = [group_dict[group_id] for group_id in group_names]
+                    response_data = {
+                        "status": "success",
+                        "subjects": subjs_name,
+                        "groups": group_names_array,
+                        "id": account_id,
+                        "mode": mode
+                    }
+                    print(response_data)
+                    return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200,
+                                          mimetype='application/json')
                 elif mode == 'Админ':
                     account_id = received_data['account_id']
                     first_name, last_name, patronymic = received_data['first_name'], received_data['last_name'], received_data['patronymic']
@@ -156,16 +166,36 @@ def users():
                     return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200,
                                           mimetype='application/json')
                 elif mode == 'Студент':
-                    subjs = [(subj[0], subj[1]) for subj in marks.query.with_entities(marks.subject_name, marks.group_id).distinct()]
-                response_data = {
-                    "status": "success",
-                    "subjects": subjs_name,
-                    "groups": group_names_array,
-                    "id": account_id,
-                    "mode": mode
-                }
-                print(response_data)
-                return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200, mimetype='application/json')
+                    account_id = received_data['id']
+                    acc = accounts.query.filter_by(id=account_id).first()
+                    uid = acc.entity_id
+                    # subjs = [subj[0] for subj in marks.query.with_entities(marks.subject_name).filter_by(student_id=11).distinct()]
+                    subjects_with_info = marks.query.with_entities(
+                        marks.subject_name,
+                        marks.module_1,
+                        marks.module_2,
+                        marks.last_mark
+                    ).filter_by(student_id=uid).distinct().all()
+                    modules_1 = []
+                    modules_2 = []
+                    last_marks = []
+                    for subject_info in subjects_with_info:
+                        subjs.append(subject_info.subject_name)
+                        modules_1.append(subject_info.module_1)
+                        modules_2.append(subject_info.module_2)
+                        last_marks.append(subject_info.last_mark)
+                    # subjs = [(subj[0], subj[1]) for subj in marks.query.with_entities(marks.subject_name, marks.student_id).distinct()]
+                    response_data = {
+                        "status": "success",
+                        "subjects": subjs,
+                        "module_1": modules_1,
+                        "module_2": modules_2,
+                        "last_mark": last_marks,
+                        "id": account_id,
+                        "mode": mode
+                    }
+                    print(response_data)
+                    return flask.Response(response=json.dumps(response_data, ensure_ascii=False), status=200, mimetype='application/json')
             elif stage == '3':
                 subject, group = received_data['subject'], received_data['group']
                 account_id, mode = received_data['id'], received_data['mode']
